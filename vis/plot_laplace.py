@@ -9,8 +9,8 @@ import sys
 t_green = '#009933'
 
 # params
-mu = int(sys.argv[1])
-b = int(sys.argv[2])
+mu = float(sys.argv[1])
+b = float(sys.argv[2])
 
 # generate samples
 # lots of samples are a lazy-man's smoothing
