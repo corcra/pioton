@@ -5,6 +5,7 @@
 # it is sensible.
 
 import re
+import sys
 utterance_re = re.compile('^utterance\(')
 phrase_re = re.compile('^phrase\(')
 mappings_re = re.compile('^mappings\(')
