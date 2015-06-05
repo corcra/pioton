@@ -12,18 +12,21 @@ mappings_re = re.compile('^mappings\(')
 candidates_re = re.compile('^candidates\(')
 EOU_re = re.compile('^\'EOU')
 
-# --- define in/out paths --- #
 # this is a file of sentences, fed into metamap
 raw_data_path = ''
+# --- grab in paths --- #
 # this is the metamap output. YMMV
 #   created by the command:
 # metamap14 -q -Q 3 --word_sense_disambiguation raw_data_path metamap_output_path
-metamap_output_path = ''
+if len(sys.argv) == 2:
+    metamap_output_path = sys.argv[1]
+else:
+    metamap_output_path = ''
+
 # this is the processed data path, the output of this script
-proc_data_path = ''
+proc_data_path = metamap_output_path + '.reform'
 
 # --- open files --- #
-raw_data = open(raw_data_path, 'r')
 metamap_output = open(metamap_output_path, 'r')
 proc_data = open(proc_data_path, 'w')
 
@@ -34,7 +37,7 @@ def parse_phrase(line):
     a string of mapped terms (into CUIs, when possible).
     """
     # list of words in the phrase
-    phrase = re.sub('\'','',re.sub('phrase\(','', line).split(',')[0])
+    phrase = re.sub('[\'\.]','',re.sub('phrase\(','', line).split(',')[0])
     # get the candidates (and most importantly, their numbers)
     candidates = metamap_output.readline()
     assert candidates_re.match(candidates)
@@ -55,17 +58,28 @@ def parse_phrase(line):
         for mapping in split_mappings[1:]:
             CUI = mapping.split(',')[1].strip('\'')
             words = re.split('[\[\]]',','.join(mapping.split(',')[4:]))[1].split(',')
+            print mapping
+            print CUI, words
             wordmap[words[0]] = CUI
             delwords += words[1:]
         # we all do things we are not proud of
         for word in phrase.split():
             try:
-                parsed_phrase += wordmap[word] + ' '
+                # lowercase word, cause it is represented in the prolog that way
+                parsed_phrase += wordmap[word.lower()] + ' '
             except KeyError:
                 if word in delwords:
                     continue
                 else:
                     parsed_phrase += word + ' '
+    # yolo
+    print phrase
+    try:
+        print delwords
+    except UnboundLocalError:
+        pass
+    print parsed_phrase
+    eh = raw_input('go on?')
     return parsed_phrase
 
 
