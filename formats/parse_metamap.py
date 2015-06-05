@@ -88,7 +88,7 @@ def parse_phrase(line):
             print '\nMapping phrase:',
             print phrase, '...'
             print outstring
-            print 'Mapped:', phrase, ' --->',
+            print 'Mapped:', phrase, '--->',
             print parsed_phrase
             print ''
             eh = raw_input('')
