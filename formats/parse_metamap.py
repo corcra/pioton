@@ -121,9 +121,10 @@ while True:
     if utterance_re.match(line):
         # we are now in an utterance!
         parsed_utterance = parse_utterance()
-        print 'Parsed utterance:',
-        print line,
-        print '====>', parsed_utterance
+        print 'Parsed utterance:'
+        print '\t','"'.join(line.split('"')[1:2]).strip('[]')
+        print '=====>'
+        print '\t',parsed_utterance
         proc_data.write(parsed_utterance+'\n')
         n += 1
     else:
