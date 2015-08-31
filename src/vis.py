@@ -33,6 +33,8 @@ def plot_displacement(A, B, save=False):
                   head_width=0.08, head_length=0.08, width=0.009)
     plt.scatter(A[:, 0], A[:, 1], s=35, c='red', linewidths=0)
     plt.scatter(B[:, 0], B[:, 1], s=35, c='blue', linewidths=0)
+    plt.axhline(0, color='grey', linestyle='--')
+    plt.axvline(0, color='grey', linestyle='--')
     # show
     if save:
         plt.savefig('fig.png')
