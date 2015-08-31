@@ -6,13 +6,15 @@ import numpy as np
 #mpl.use('Agg')
 import matplotlib.pyplot as plt
 
-def plot_displacement(A, B, save=False):
+def plot_displacement(A, B, save=False, labels=None):
     """
     A and B are both num_samples x num_dimensions
     for now, num_dimensions must = 2
     """
     assert A.shape == B.shape
     assert A.shape[1] == 2
+    if not labels is None:
+        assert len(labels) == A.shape[0]
     delta = B - A
     delta_dir = delta/np.linalg.norm(delta, axis=1).reshape(-1, 1)
     fig = plt.figure()
@@ -24,15 +26,20 @@ def plot_displacement(A, B, save=False):
     plt.xlim(1.1*xmin, 1.1*xmax)
     plt.ylim(1.1*ymin, 1.1*ymax)
     # create
-    # add displacement arrows
+    # add displacement arrows, possibly labels
     offset = 0.05
     for i in xrange(A.shape[0]):
         plt.arrow(A[i, 0]+offset*delta_dir[i, 0], A[i, 1]+offset*delta_dir[i, 1],
                   delta[i, 0]-2*offset*delta_dir[i, 0], delta[i, 1]-2*offset*delta_dir[i, 1],
                   length_includes_head=True, alpha=0.5, color='grey',
                   head_width=0.08, head_length=0.08, width=0.009)
-    plt.scatter(A[:, 0], A[:, 1], s=35, c='red', linewidths=0)
-    plt.scatter(B[:, 0], B[:, 1], s=35, c='blue', linewidths=0)
+        if not labels is None:
+            plt.annotate(labels[i], xy=A[i, :], xytext=A[i, :], color='red')
+            plt.annotate(labels[i], xy=B[i, :], xytext=B[i, :], color='blue')
+    if labels is None:
+        # without labels, just plot points
+        plt.scatter(A[:, 0], A[:, 1], s=35, c='red', linewidths=0)
+        plt.scatter(B[:, 0], B[:, 1], s=35, c='blue', linewidths=0)
     plt.axhline(0, color='grey', linestyle='--')
     plt.axvline(0, color='grey', linestyle='--')
     # show
