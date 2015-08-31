@@ -6,7 +6,7 @@ import numpy as np
 #mpl.use('Agg')
 import matplotlib.pyplot as plt
 
-import src.vis_fns as vf
+import src.vis as vis
 
 def affine_transformation(d, trans=None):
     """
@@ -54,4 +54,4 @@ def roll(trans_opt=None):
     print T
     print np.linalg.det(T)
     B = apply_transformation(A, T)
-    vf.plot_displacement(A, B)
+    vis.plot_displacement(A, B)
